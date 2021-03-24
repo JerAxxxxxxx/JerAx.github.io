@@ -1,8 +1,8 @@
 # Site settings
-title: My Blog
+title: JerAxxxxxxx
 SEOTitle: 我的博客 | My Blog
 header-img: img/post-bg-desk.jpg
-email: 暂无
+email: null
 description: "写一句你想写的话"
 keyword: "我的博客"
 url: "https://jeraxxxxxxx.github.io"          # your host, for absolute URL
@@ -12,7 +12,7 @@ github_repo: "https://github.com/jeraxxxxxxx/jeraxxxxxxx.github.io.git" # you co
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "苟利国家生死以，岂因祸福避趋之~"
-sidebar-avatar: /img/avatar_binggan.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/doraemon.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
