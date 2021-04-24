@@ -1,4 +1,3 @@
-```
 ---
 layout:     post
 title:      sentinel-dashboard 都做了什么
@@ -10,7 +9,6 @@ catalog: true
 tags:
 - sentinel
 ---
-```
 
 近日，公司打算采用阿里的 sentinel 限流组件，对整个平台的各个服务进行限流、降级处理。因为需求需要改造 sentinel-dashboard ，所以趁这个机会好好学习一下 sentinel。
 
@@ -30,6 +28,8 @@ sentinel-dashboard 本身是一个 SpringBoot 工程
   编辑规则
 - /v1/flow/delete.json
   删除规则
+  
+
 #### 从 dashboard 新增规则（v1/flow/rule）
 新增规则时，会调用`FlowControllerV1` 的 `/v1/flow/rule` 接口
 
@@ -85,6 +85,7 @@ public T save(T entity) {
 ```
 
 在 2 处的方法 `publishRules()` ，该方法主要是将配置的流控规则，通过 http 的方式推送至 sentinel 客户端的内存之中。 
+
 
 #### 从 sentinel 客户端获取规则（/v1/flow/rules）
 
