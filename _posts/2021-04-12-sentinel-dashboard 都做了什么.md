@@ -5,7 +5,7 @@ title:      sentinel-dashboard 都做了什么
 subtitle:   
 date:       2021-04-12
 author:     JerAxxxxxxx
-header-img: img/clock_1.jpg
+header-img: img/background/clock_1.jpg
 catalog: true
 tags:
 - sentinel
