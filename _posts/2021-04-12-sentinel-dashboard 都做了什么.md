@@ -50,7 +50,8 @@ sentinel-dashboard 本身是一个 SpringBoot 工程
             // 该方法会将 entity 对象，即限流规则存入 dashboard 的内存中
             entity = repository.save(entity);//1
 			// 将 dashboard 配置的规则推送到 sentinel 客户端
-            publishRules(entity.getApp(), entity.getIp(), entity.getPort()).get(5000, TimeUnit.MILLISECONDS);//2
+            publishRules(entity.getApp(), entity.getIp(), entity.getPort())
+                .get(5000, TimeUnit.MILLISECONDS);//2
             return Result.ofSuccess(entity);
         } catch (Throwable t) {
             Throwable e = t instanceof ExecutionException ? t.getCause() : t;
@@ -86,6 +87,17 @@ public T save(T entity) {
 
 在 2 处的方法 `publishRules()` ，该方法主要是将配置的流控规则，通过 http 的方式推送至 sentinel 客户端的内存之中。 
 
+```java
+    private CompletableFuture<Void> publishRules(String app, String ip, Integer port) {
+        // 通过内存中的 sentinel 客户端的机器信息，获取规则。
+        List<FlowRuleEntity> rules = repository.findAllByMachine(MachineInfo.of(app, ip, port));
+        // 通过 http 的方式存储规则。
+        return sentinelApiClient.setFlowRuleOfMachineAsync(app, ip, port, rules);
+    }
+```
+
+
+
 
 #### 从 sentinel 客户端获取规则（/v1/flow/rules）
 
@@ -104,7 +116,7 @@ public T save(T entity) {
         }
 ```
 
-这里的两个方法都比较好理解，首先通过 http 的方式，从 sentinel 客户端获取规则。然后将所有规则存入 dashboard 的内存中。一下为 saveAll() 方法，这里在添加规则调用的 `save()` 就是新增时调用的那个。
+这里的两个方法都比较好理解，首先通过 http 的方式，从 sentinel 客户端获取规则。然后将所有规则存入 dashboard 的内存中。以下为 `saveAll()` 方法，这里在添加规则调用的 `save()` 就是新增时调用的那个。
 
 ```java
 public List<T> saveAll(List<T> rules) {
