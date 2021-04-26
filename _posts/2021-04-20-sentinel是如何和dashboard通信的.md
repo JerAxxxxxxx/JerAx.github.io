@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      sentinel是如何和dashboard通信的
+title:      sentinel 是如何和 dashboard 通信的
 subtitle:   对 sentinel 的学习笔记
 date:       2021-04-20
 author:     JerAxxxxxxx
@@ -19,7 +19,7 @@ tags:
 
 
 
-![SentinelResourceAspect类中的调用](/img/sentinel/sentinel_aspect.PNG)  
+![ SentinelResourceAspect类中的调用 ](/img/sentinel/sentinel_aspect.PNG)  
 
 
 
@@ -69,7 +69,7 @@ public static void doInit() {
 
 可以看出，`doInit()` 方法主要是拿到 `InitFunc` 接口的所有实现类，根据 `@InitOrder` 注解对其优先级进行排序，如果不存在该注解，那么优先级将设置为最低级。最终调用所有实现类的 `init()` 方法。
 
-![InitFunc 的实现类](/img/sentinel/InitFunc_impls.png)  
+![ InitFunc 的实现类 ](/img/sentinel/InitFunc_impls.png)  
 
 
 
@@ -303,3 +303,7 @@ private static ServerSocket getServerSocketFromBasePort(int basePort) {
 #### 总结
 
 至此，sentinel 客户端的启动大致也分析完毕。客户端启动后，通过 restful 对外暴露接口，建立与 dashboard 之间的通信，保证了在默认情况下 dashboard 中的改动可以在客户端得到同步。当然，在生产环境中，我们不会让规则都写入内存中，这样，服务重启后会丢掉所有的规则，通常会通过 配置中心/注册中心 进行保存。
+
+----
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a>进行许可。

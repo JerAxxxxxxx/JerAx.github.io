@@ -150,3 +150,7 @@ public List<T> saveAll(List<T> rules) {
 ### 总结
 
 至此，dashboard 的代码已经看完，虽然 sentinel-dashboard 并不是一个生产环境开箱即用的组件，但是对于学习 sentinel 服务还是有很大的帮助的。本篇主要从控制台的各个操作，学习了 dashboard 的大体功能，下一篇将分析 **dashboard 是如何和 sentinel 建立通信**，并获取规则的。
+
+----
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a>进行许可。
