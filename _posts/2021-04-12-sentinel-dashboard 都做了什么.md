@@ -1,13 +1,13 @@
 ---
 layout:     post
 title:      sentinel-dashboard 都做了什么
-subtitle:   
+subtitle:   对 sentinel-dashboard 的学习笔记
 date:       2021-04-12
 author:     JerAxxxxxxx
 header-img: img/background/clock_1.jpg
 catalog: true
 tags:
-- sentinel
+    - sentinel
 ---
 
 近日，公司打算采用阿里的 sentinel 限流组件，对整个平台的各个服务进行限流、降级处理。因为需求需要改造 sentinel-dashboard ，所以趁这个机会好好学习一下 sentinel。

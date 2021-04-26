@@ -1,13 +1,13 @@
 ---
 layout:     post
 title:      sentinel是如何和dashboard通信的
-subtitle:   
+subtitle:   对 sentinel 的学习笔记
 date:       2021-04-20
 author:     JerAxxxxxxx
 header-img: img/background/sky_mks_trees_night_stars_art.jpg
 catalog: true
 tags:
-- sentinel
+    - sentinel
 ---
 
 
