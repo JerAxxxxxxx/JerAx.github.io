@@ -4,12 +4,13 @@ title:      Kong&Konga docker swarm 部署
 subtitle:   附一键安装脚本
 date:       2021-08-23
 author:     JerAxxxxxxx
-header-img: img/background/abstract_digital_art_Iron_Man.jpg.jpg
+header-img: img/background/abstract_digital_art_Iron_Man.jpg
 catalog: true
 tags:
 - kong
 ---
 
+#### Kong docker swarm 部署
 
 这次分享下 Kong&Konga 通过 docker swarm 部署的脚本，因为目前没有用上 K8S，目前还是用比较轻量的 docker swarm 进行部署。
 
