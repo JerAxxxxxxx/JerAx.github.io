@@ -90,9 +90,8 @@ services:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
       KONG_PG_PASSWORD: kongSekorm
-      KONG_PROXY_LISTEN: 0.0.0.0:8000
-      KONG_PROXY_LISTEN_SSL: 0.0.0.0:8443
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
     depends_on:
       - kong-migration
     links:
@@ -101,6 +100,7 @@ services:
       - "8001:8001"
       - "8000:8000"
       - "8443:8443"
+      - "8444:8444"
 
   konga-prepare:
     image: ${KONGA_IMAGE_NAME}
@@ -160,10 +160,119 @@ build_yaml &&
   start_kong
 ```
 
+#### docker-compose.yaml
+由于博客上 shell 的格式对于 yaml 文件不太友好，重新把 docker-compose.yaml 文件内容贴一下
+```yaml
+version: "3.8"
 
+networks:
+ kong-net:
+  driver: overlay
 
+services:
+  kong-database:
+    image: ${POSTGRES_IMAGE_NAME}
+    restart: always
+    networks:
+      - kong-net
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+      POSTGRES_PASSWORD: kongSekorm
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kong-migration:
+    image: ${KONG_IMAGE_NAME}
+    command: "kong migrations bootstrap"
+    networks:
+      - kong-net
+    restart: on-failure
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
+      - KONG_PG_DATABASE=kong
+      - KONG_PG_PASSWORD=kongSekorm
+    links:
+      - kong-database
+    depends_on:
+      - kong-database
+
+  kong:
+    image: ${KONG_IMAGE_NAME}
+    restart: always
+    networks:
+      - kong-net
+    volumes:
+      - kong-data:/usr/local/kong
+      - kong-cfg:/etc/kong
+    deploy:
+      replicas: 3
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_PASSWORD: kongSekorm
+      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+    depends_on:
+      - kong-migration
+    links:
+      - kong-database
+    ports:
+      - "8001:8001"
+      - "8000:8000"
+      - "8443:8443"
+      - "8444:8444"
+
+  konga-prepare:
+    image: ${KONGA_IMAGE_NAME}
+    command: "-c prepare -a postgres -u postgresql://kong:kongSekorm@kong-database:5432/konga"
+    networks:
+      - kong-net
+    restart: on-failure
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
+      - KONG_PG_DATABASE=konga
+      - KONG_PG_PASSWORD=kongSekorm
+    links:
+      - kong-database
+    depends_on:
+      - kong-database
+
+  konga:
+    image: ${KONGA_IMAGE_NAME}
+    restart: always
+    networks:
+     - kong-net
+    environment:
+      DB_ADAPTER: postgres
+      DB_URI: postgresql://kong:kongSekorm@kong-database:5432/konga
+      NODE_ENV: production
+    links:
+      - kong-database
+    depends_on:
+      - kong
+      - konga-prepare
+    ports:
+      - "1337:1337"
+
+volumes:
+  postgres-data:
+  kong-data:
+  kong-cfg:
+```
 
 
 ----
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a>进行许可。
+
