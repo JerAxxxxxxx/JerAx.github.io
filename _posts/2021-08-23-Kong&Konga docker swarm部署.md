@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Kong&Konga docker swarm 部署
-subtitle:   附一键安装脚本
+subtitle:   docker-compose 部署
 date:       2021-08-23
 author:     JerAxxxxxxx
 header-img: img/background/abstract_digital_art_Iron_Man.jpg
@@ -50,7 +50,7 @@ services:
     environment:
       POSTGRES_USER: kong
       POSTGRES_DB: kong
-      POSTGRES_PASSWORD: kongSekorm
+      POSTGRES_PASSWORD: kong
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
@@ -70,7 +70,7 @@ services:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
       - KONG_PG_DATABASE=kong
-      - KONG_PG_PASSWORD=kongSekorm
+      - KONG_PG_PASSWORD=kong
     links:
       - kong-database
     depends_on:
@@ -89,7 +89,7 @@ services:
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
-      KONG_PG_PASSWORD: kongSekorm
+      KONG_PG_PASSWORD: kong
       KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
       KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
     depends_on:
@@ -104,7 +104,7 @@ services:
 
   konga-prepare:
     image: ${KONGA_IMAGE_NAME}
-    command: "-c prepare -a postgres -u postgresql://kong:kongSekorm@kong-database:5432/konga"
+    command: "-c prepare -a postgres -u postgresql://kong:kong@kong-database:5432/konga"
     networks:
       - kong-net
     restart: on-failure
@@ -112,7 +112,7 @@ services:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
       - KONG_PG_DATABASE=konga
-      - KONG_PG_PASSWORD=kongSekorm
+      - KONG_PG_PASSWORD=kong
     links:
       - kong-database
     depends_on:
@@ -125,7 +125,7 @@ services:
      - kong-net
     environment:
       DB_ADAPTER: postgres
-      DB_URI: postgresql://kong:kongSekorm@kong-database:5432/konga
+      DB_URI: postgresql://kong:kong@kong-database:5432/konga
       NODE_ENV: production
     links:
       - kong-database
@@ -161,13 +161,15 @@ build_yaml &&
 ```
 
 #### docker-compose.yaml
+
 由于博客上 shell 的格式对于 yaml 文件不太友好，重新把 docker-compose.yaml 文件内容贴一下
+
 ```yaml
 version: "3.8"
 
 networks:
- kong-net:
-  driver: overlay
+  kong-net:
+    driver: overlay
 
 services:
   kong-database:
@@ -180,12 +182,12 @@ services:
     environment:
       POSTGRES_USER: kong
       POSTGRES_DB: kong
-      POSTGRES_PASSWORD: kongSekorm
+      POSTGRES_PASSWORD: kong
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "kong"]
+      test: [ "CMD", "pg_isready", "-U", "kong" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -200,7 +202,7 @@ services:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
       - KONG_PG_DATABASE=kong
-      - KONG_PG_PASSWORD=kongSekorm
+      - KONG_PG_PASSWORD=kong
     links:
       - kong-database
     depends_on:
@@ -219,7 +221,7 @@ services:
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
-      KONG_PG_PASSWORD: kongSekorm
+      KONG_PG_PASSWORD: kong
       KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
       KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
     depends_on:
@@ -234,7 +236,7 @@ services:
 
   konga-prepare:
     image: ${KONGA_IMAGE_NAME}
-    command: "-c prepare -a postgres -u postgresql://kong:kongSekorm@kong-database:5432/konga"
+    command: "-c prepare -a postgres -u postgresql://kong:kong@kong-database:5432/konga"
     networks:
       - kong-net
     restart: on-failure
@@ -242,7 +244,7 @@ services:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
       - KONG_PG_DATABASE=konga
-      - KONG_PG_PASSWORD=kongSekorm
+      - KONG_PG_PASSWORD=kong
     links:
       - kong-database
     depends_on:
@@ -252,10 +254,10 @@ services:
     image: ${KONGA_IMAGE_NAME}
     restart: always
     networks:
-     - kong-net
+      - kong-net
     environment:
       DB_ADAPTER: postgres
-      DB_URI: postgresql://kong:kongSekorm@kong-database:5432/konga
+      DB_URI: postgresql://kong:kong@kong-database:5432/konga
       NODE_ENV: production
     links:
       - kong-database
@@ -271,8 +273,8 @@ volumes:
   kong-cfg:
 ```
 
-
 ----
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a>进行许可。
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />
+本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享 4.0 国际许可协议</a>进行许可。
 
