@@ -31,25 +31,25 @@ tags:
 单节点部署时, 直接使用 docker run 通过镜像启动一个容器即可
 
 ```bash
-  docker run -d --name ${KONG_NAME} --network=${NETWORK_NAME} \\\\
-    -v ${KONG_VOLUME_NAME}:${KONG_VOLUME_DIR} \\\\
-    -e "KONG_DATABASE=postgres" \\\\
-    -e "KONG_PG_HOST=${KONG_DATABASE_NAMES}" \\\\
-    -e "KONG_PG_PASSWORD=kong" \\\\
-    -e "KONG_PROXY_ACCESS_LOG=/dev/stdout" \\\\
-    -e "KONG_ADMIN_ACCESS_LOG=/dev/stdout" \\\\
-    -e "KONG_PROXY_ERROR_LOG=/dev/stderr" \\\\
-    -e "KONG_ADMIN_ERROR_LOG=/dev/stderr" \\\\
-    -e "KONG_ADMIN_LISTEN=0.0.0.0:8001" \\\\
-    -e "KONG_ADMIN_GUI_URL=http://${HOST}" \\\\
-    -p 8000:8000 \\\\
-    -p 8443:8443 \\\\
-    -p 8001:8001 \\\\
-    -p 8444:8444 \\\\
-    -p 8002:8002 \\\\
-    -p 8445:8445 \\\\
-    -p 8003:8003 \\\\
-    -p 8004:8004 \\\\
+  docker run -d --name ${KONG_NAME} --network=${NETWORK_NAME} \\
+    -v ${KONG_VOLUME_NAME}:${KONG_VOLUME_DIR} \\
+    -e "KONG_DATABASE=postgres" \\
+    -e "KONG_PG_HOST=${KONG_DATABASE_NAMES}" \\
+    -e "KONG_PG_PASSWORD=kong" \\
+    -e "KONG_PROXY_ACCESS_LOG=/dev/stdout" \\
+    -e "KONG_ADMIN_ACCESS_LOG=/dev/stdout" \\
+    -e "KONG_PROXY_ERROR_LOG=/dev/stderr" \\
+    -e "KONG_ADMIN_ERROR_LOG=/dev/stderr" \\
+    -e "KONG_ADMIN_LISTEN=0.0.0.0:8001" \\
+    -e "KONG_ADMIN_GUI_URL=http://${HOST}" \\
+    -p 8000:8000 \\
+    -p 8443:8443 \\
+    -p 8001:8001 \\
+    -p 8444:8444 \\
+    -p 8002:8002 \\
+    -p 8445:8445 \\
+    -p 8003:8003 \\
+    -p 8004:8004 \\
     ${KONG_IMAGE_NAME}
 }
 ```
@@ -72,7 +72,7 @@ docker swarm 的部署文件截取了部署 kong 的一部分.
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
-      KONG_PG_PASSWORD: kongSekorm
+      KONG_PG_PASSWORD: kong
       KONG_PROXY_LISTEN: 0.0.0.0:8000
       KONG_PROXY_LISTEN_SSL: 0.0.0.0:8443
       KONG_ADMIN_LISTEN: 0.0.0.0:8001
@@ -94,7 +94,7 @@ docker swarm 的部署文件截取了部署 kong 的一部分.
 
 **结果:**
 
-> 部署后 8443 端口依旧无法访问
+> 部署后 8443 端口依旧无法访问, 故排除
 
 #### ipv6 的原因
 
