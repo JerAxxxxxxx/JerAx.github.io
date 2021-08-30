@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Docker Compose 部署 Kong, 8443 端口无法访问
-subtitle:   docker-compose.yaml 参数的问题
+subtitle:   Kong 8443 端口无响应
 date:       2021-08-25
 author:     JerAxxxxxxx
 header-img: img/background/Clouds_landscapes_nature_trees.jpg
@@ -107,7 +107,7 @@ docker swarm 的部署文件截取了部署 kong 的一部分.
 
 最后排查的是安装的脚本，在脚本中找到了这个参数`KONG_PROXY_LISTEN`, 便怀疑有问题。
 
-最终查看 GitHub 一个 [issue](https://github.com/Kong/kong/issues/4181) 找到了以下的配置方法。
+最终查看 GitHub Kong 中的一个 [issue](https://github.com/Kong/kong/issues/4181) 找到了以下的配置方法。
 更改之后问题消失。
 
 ```yaml
@@ -120,7 +120,10 @@ KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
 通过查看 Kong GitHub 上的一个 [issue](https://github.com/Kong/kong/issues/4181) , 找到了正确的参数配置
 
 yaml 文件中 `KONG_PROXY_LISTEN_SSL: 0.0.0.0:8443` 参数是无效的，不正确的。
-应该更换为 `KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl`
+
+应该更换为 `KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl`。
+
+正确的 yaml 配置可以见上一篇博客，这里已做修改。
 
 
 ----
