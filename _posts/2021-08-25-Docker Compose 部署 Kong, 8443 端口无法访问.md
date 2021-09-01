@@ -107,7 +107,7 @@ docker swarm 的部署文件截取了部署 kong 的一部分.
 
 最后排查的是安装的脚本，在脚本中找到了这个参数`KONG_PROXY_LISTEN`, 便怀疑有问题。
 
-最终查看 GitHub Kong 中的一个 [issue](https://github.com/Kong/kong/issues/4181) 找到了以下的配置方法。
+最终查看 GitHub Kong 中的一个 issue [kong 8443 on docker "Could not get any response" #4181](https://github.com/Kong/kong/issues/4181) 找到了以下的配置方法。
 更改之后问题消失。
 
 ```yaml
@@ -117,7 +117,7 @@ KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
 
 ### 原因总结
 
-通过查看 Kong GitHub 上的一个 [issue](https://github.com/Kong/kong/issues/4181) , 找到了正确的参数配置
+通过查看 Kong GitHub 上的一个 issue [kong 8443 on docker "Could not get any response" #4181](https://github.com/Kong/kong/issues/4181) , 找到了正确的参数配置
 
 yaml 文件中 `KONG_PROXY_LISTEN_SSL: 0.0.0.0:8443` 参数是无效的，不正确的。
 
